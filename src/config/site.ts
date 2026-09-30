@@ -53,7 +53,7 @@ export const site = {
   timezone: 'UTC+8',
 
   photo: {
-    /** Square head-and-shoulders crop of the studio portrait, 930 x 930. */
+    /** Square head-and-shoulders portrait, 1200 x 1200. */
     src: '/portrait.webp',
     /** Same crop at 600 x 600, for 1x and 2x screens. */
     medium: '/portrait-600.webp',
@@ -61,9 +61,9 @@ export const site = {
     avatar: '/portrait-avatar.webp',
     /** JPEG copy for Open Graph and JSON-LD, where WebP isn't always supported. */
     jpg: '/portrait.jpg',
-    alt: 'Portrait of Kim Russel Antonio Soriano in a dark suit and red tie',
-    width: 930,
-    height: 930,
+    alt: 'Portrait of Kim Russel Antonio Soriano in a white shirt',
+    width: 1200,
+    height: 1200,
   },
 
   links: {

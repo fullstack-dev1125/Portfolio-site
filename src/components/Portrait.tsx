@@ -7,7 +7,7 @@ type PortraitProps = {
 
 /**
  * The portrait. The hero uses its own tight face crop; the About frame picks
- * the 600px or 930px copy of the square crop to suit the screen.
+ * the 600px or 1200px copy of the square crop to suit the screen.
  */
 export default function Portrait({ variant }: PortraitProps) {
   const { src, medium, avatar, alt, width, height } = site.photo;
@@ -31,7 +31,7 @@ export default function Portrait({ variant }: PortraitProps) {
     <div className="glow-frame mx-auto aspect-square w-full max-w-xs overflow-hidden bg-panel p-2">
       <img
         src={src}
-        srcSet={`${medium} 600w, ${src} 930w`}
+        srcSet={`${medium} 600w, ${src} 1200w`}
         sizes="(min-width: 400px) 304px, calc(100vw - 56px)"
         alt={alt}
         width={width}

@@ -115,17 +115,15 @@ src/
 
 ## Portrait
 
-The source is a 1691 × 930 studio photo on a black background. Two crops were
-cut from it with ImageMagick. Nothing was retouched or upscaled: at 930 px the
-square crop is already sharp on a 3× phone screen, and upscaling would only
-add weight.
+The source is a 1254 × 1254 head-and-shoulders photo on a white background.
+It was resized and cropped with ImageMagick. Nothing else was changed.
 
-| File                          | Size      | Used for                                     |
-| ----------------------------- | --------- | -------------------------------------------- |
-| `public/portrait.webp`        | 930 × 930 | About frame on high-density screens          |
-| `public/portrait-600.webp`    | 600 × 600 | About frame on 1× and 2× screens             |
-| `public/portrait-avatar.webp` | 480 × 480 | Round hero avatar (tighter face crop)        |
-| `public/portrait.jpg`         | 930 × 930 | Open Graph `og:image` and JSON-LD `image`    |
+| File                          | Size        | Used for                                     |
+| ----------------------------- | ----------- | -------------------------------------------- |
+| `public/portrait.webp`        | 1200 × 1200 | About frame on high-density screens          |
+| `public/portrait-600.webp`    | 600 × 600   | About frame on 1× and 2× screens             |
+| `public/portrait-avatar.webp` | 480 × 480   | Round hero avatar (tighter face crop)        |
+| `public/portrait.jpg`         | 1200 × 1200 | Open Graph `og:image` and JSON-LD `image`    |
 
 To swap the photo, replace these four files and keep the names, or update
 `photo` in `src/config/site.ts`.
