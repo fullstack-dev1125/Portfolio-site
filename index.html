@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#06061A" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+
+    <!--
+      Title, meta description, Open Graph tags and the Person + ProfessionalService
+      JSON-LD are generated from src/config/site.ts by identity-html.ts.
+    -->
+    <!-- identity:head -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Loaded without blocking the first paint; the system font shows until it arrives. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+  </head>
+  <body>
+    <!-- Name, email, phone and full address as plain text, for visitors without JavaScript. -->
+    <!-- identity:noscript -->
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" />
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
