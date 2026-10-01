@@ -311,7 +311,10 @@ export const jobs: Job[] = [
 ];
 
 /** "How I work" steps. */
-export const process: { title: string; tag: string; body: string; points: string[]; outcome: string; icon: IconKey }[] = [
+/** A short sample file shown in the "How I Work" editor card. */
+export type CodeSample = { file: string; lines: string[] };
+
+export const process: { title: string; tag: string; body: string; points: string[]; outcome: string; icon: IconKey; code: CodeSample }[] = [
   {
     title: 'Discovery',
     tag: 'Requirements',
@@ -319,6 +322,18 @@ export const process: { title: string; tag: string; body: string; points: string
     points: ['Goals and success criteria', 'Existing systems and data', 'Timeline and milestones'],
     outcome: 'A written scope we both sign off',
     icon: 'compass',
+    code: {
+      file: 'scope.ts',
+      lines: [
+        '// Agreed in writing before any code',
+        'export const scope = {',
+        "  goal: 'Catalog search under 300 ms',",
+        "  users: ['buyers', 'ops team'],",
+        "  milestones: ['API', 'Dashboard', 'Launch'],",
+        "  done: 'p95 latency holds in a load test',",
+        '};',
+      ],
+    },
   },
   {
     title: 'Architecture',
@@ -327,6 +342,18 @@ export const process: { title: string; tag: string; body: string; points: string
     points: ['Schema and migrations plan', 'REST or GraphQL contracts', 'Monolith or services, and why'],
     outcome: 'An architecture you can review',
     icon: 'layers',
+    code: {
+      file: 'schema.sql',
+      lines: [
+        'CREATE TABLE orders (',
+        '  id          BIGSERIAL PRIMARY KEY,',
+        '  customer_id BIGINT NOT NULL REFERENCES customers (id),',
+        "  status      TEXT NOT NULL DEFAULT 'pending',",
+        '  total_cents INTEGER NOT NULL CHECK (total_cents >= 0)',
+        ');',
+        'CREATE INDEX orders_customer_idx ON orders (customer_id);',
+      ],
+    },
   },
   {
     title: 'Interface',
@@ -335,6 +362,20 @@ export const process: { title: string; tag: string; body: string; points: string
     points: ['Component structure', 'Responsive layouts', 'WCAG-minded markup'],
     outcome: 'Screens you can click through',
     icon: 'pen',
+    code: {
+      file: 'ProductCard.tsx',
+      lines: [
+        'export function ProductCard({ product }: Props) {',
+        '  return (',
+        '    <article className="card">',
+        '      <img src={product.image} alt={product.name} />',
+        '      <h3>{product.name}</h3>',
+        '      <Price value={product.price} />',
+        '    </article>',
+        '  );',
+        '}',
+      ],
+    },
   },
   {
     title: 'Development',
@@ -343,6 +384,17 @@ export const process: { title: string; tag: string; body: string; points: string
     points: ['Frontend development', 'Backend and API build', 'Payments and third-party integrations'],
     outcome: 'A working build, release by release',
     icon: 'code',
+    code: {
+      file: 'suppliers.py',
+      lines: [
+        '@router.get("/v1/suppliers/{supplier_id}")',
+        'async def get_supplier(supplier_id: int, db=Depends(get_db)):',
+        '    supplier = await db.get(Supplier, supplier_id)',
+        '    if supplier is None:',
+        '        raise HTTPException(404, "Supplier not found")',
+        '    return SupplierOut.model_validate(supplier)',
+      ],
+    },
   },
   {
     title: 'Testing',
@@ -351,6 +403,18 @@ export const process: { title: string; tag: string; body: string; points: string
     points: ['Jest, PHPUnit, Cypress', 'Load and query performance', 'Cross-browser checks'],
     outcome: 'Confidence the release holds up',
     icon: 'flask',
+    code: {
+      file: 'checkout.test.ts',
+      lines: [
+        "describe('checkout', () => {",
+        "  it('keeps stock and orders in sync', async () => {",
+        '    const order = await checkout(cart, { stock: 1 });',
+        "    expect(order.status).toBe('paid');",
+        '    expect(await stockFor(cart.sku)).toBe(0);',
+        '  });',
+        '});',
+      ],
+    },
   },
   {
     title: 'Launch & Support',
@@ -359,6 +423,20 @@ export const process: { title: string; tag: string; body: string; points: string
     points: ['Docker and CI/CD pipeline', 'AWS, GCP or Azure', 'Docs and handover notes'],
     outcome: 'A live product, documented',
     icon: 'rocket',
+    code: {
+      file: '.github/workflows/deploy.yml',
+      lines: [
+        'on:',
+        '  push: { branches: [main] }',
+        'jobs:',
+        '  deploy:',
+        '    runs-on: ubuntu-latest',
+        '    steps:',
+        '      - uses: actions/checkout@v4',
+        '      - run: docker build -t api .',
+        '      - run: kubectl apply -f k8s/',
+      ],
+    },
   },
 ];
 

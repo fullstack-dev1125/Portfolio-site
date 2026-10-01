@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { process } from '../config/site';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import CodeWindow from './CodeWindow';
 import Icon from './Icon';
 import Section, { SectionHeading } from './Section';
 
@@ -100,37 +101,30 @@ export default function Process() {
             </div>
           </article>
 
-          {/* Visual */}
-          <div
-            aria-hidden="true"
-            className="relative min-h-80 overflow-hidden rounded-2xl border border-line-strong bg-[linear-gradient(160deg,#1f1633,#120e1c_45%,#0c0b10)] p-6 sm:p-8"
-          >
-            <div className="absolute -top-20 -right-10 h-72 w-72 rounded-full bg-violet-deep/30 blur-3xl" />
-            <span className="relative inline-block rounded-full border border-violet-mid/40 bg-violet-deep/25 px-3 py-1 text-xs font-medium text-violet">
-              {current.tag}
-            </span>
+          {/* Visual: a sample of the code behind this step */}
+          <div className="relative flex min-h-80 flex-col overflow-hidden rounded-2xl border border-line-strong bg-[linear-gradient(160deg,#1f1633,#120e1c_45%,#0c0b10)] p-5 sm:p-7">
+            <div aria-hidden="true" className="absolute -top-20 -right-10 h-72 w-72 rounded-full bg-violet-deep/30 blur-3xl" />
+            <Icon name={current.icon} className="absolute -right-6 -bottom-6 h-40 w-40 text-violet/10" />
 
-            {/* Faux editor */}
-            <div className="absolute top-16 right-6 hidden w-56 rounded-xl border border-line bg-bg/70 p-4 backdrop-blur sm:block">
-              <div className="flex gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-rose-400/70" />
-                <span className="h-2 w-2 rounded-full bg-amber-300/70" />
-                <span className="h-2 w-2 rounded-full bg-emerald-400/70" />
-              </div>
-              <div className="mt-4 space-y-2">
-                {[70, 45, 85, 55, 65, 35].map((w, i) => (
-                  <span key={i} className={`block h-1.5 rounded-full ${i % 3 === 1 ? 'bg-violet/60' : 'bg-white/15'}`} style={{ width: `${w}%`, marginLeft: i % 2 ? '12%' : 0 }} />
-                ))}
-              </div>
+            <div className="relative flex items-center justify-between gap-3">
+              <span className="rounded-full border border-violet-mid/40 bg-violet-deep/25 px-3 py-1 text-xs font-medium text-violet">{current.tag}</span>
+              <span className="text-xs text-muted">Sample code</span>
             </div>
-            <Icon name={current.icon} className="absolute top-1/3 left-1/2 h-28 w-28 -translate-x-1/2 text-violet/20 sm:left-1/3" />
 
-            <div key={step} className="fade-in absolute inset-x-6 bottom-6 sm:inset-x-8 sm:bottom-8">
-              <p className="text-6xl font-extrabold text-white/25 sm:text-7xl">{pad(step + 1)}</p>
-              <p className="mt-1 text-3xl font-bold sm:text-4xl">{current.title}</p>
-              <p className="mt-3 max-w-md text-sm text-muted">
-                Next: <span className="text-text">{next.title}</span>, {next.tag.toLowerCase()}.
-              </p>
+            <div key={step} className="fade-in relative mt-5 flex flex-1 flex-col">
+              <CodeWindow sample={current.code} />
+
+              <div className="mt-auto flex items-end gap-4 pt-6">
+                <p aria-hidden="true" className="text-5xl leading-none font-extrabold text-white/25 sm:text-6xl">
+                  {pad(step + 1)}
+                </p>
+                <div>
+                  <p className="text-2xl font-bold sm:text-3xl">{current.title}</p>
+                  <p className="mt-1 text-sm text-muted">
+                    Next: <span className="text-text">{next.title}</span>, {next.tag.toLowerCase()}.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
