@@ -1,16 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { projects, site } from '../config/site';
+import { projects, site, type Project } from '../config/site';
 import Icon from './Icon';
 import Section, { SectionHeading } from './Section';
 
 const shownTags = 3;
 
+const categories: Project['category'][] = ['Shopify', 'WordPress', 'Data visualisation', 'Web apps'];
+const filters = ['All', ...categories] as const;
+type Filter = (typeof filters)[number];
+const countFor = (filter: Filter) => (filter === 'All' ? projects.length : projects.filter((project) => project.category === filter).length);
+
 export default function Work() {
   const track = useRef<HTMLUListElement>(null);
   const [pages, setPages] = useState(1);
   const [page, setPage] = useState(0);
+  const [filter, setFilter] = useState<Filter>('All');
+  const shown = filter === 'All' ? projects : projects.filter((project) => project.category === filter);
 
   // Work out how many "pages" the track has and which one is in view.
   useEffect(() => {
@@ -29,7 +36,12 @@ export default function Work() {
       el.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
     };
-  }, []);
+  }, [filter]);
+
+  const pick = (next: Filter) => {
+    setFilter(next);
+    track.current?.scrollTo({ left: 0 });
+  };
 
   const scrollBy = (direction: 1 | -1) => {
     const el = track.current;
@@ -55,7 +67,7 @@ export default function Work() {
           title="Featured"
           accent="Projects"
           align="left"
-          intro="Stores, data visualisation and web apps from my portfolio. The Shopify stores are live, so go and try them."
+          intro="Shopify stores, WordPress sites, data visualisation and web apps. The Shopify stores are live, so go and try them."
         />
         <div className="reveal flex gap-3">
           <button type="button" className="icon-btn" onClick={() => scrollBy(-1)} disabled={page === 0} aria-controls="work-track">
@@ -69,17 +81,42 @@ export default function Work() {
         </div>
       </div>
 
+      <div className="container-page reveal mt-10">
+        <div role="group" aria-label="Filter projects by type" className="no-scrollbar inline-flex max-w-full gap-1 overflow-x-auto rounded-full border border-line bg-card p-1">
+          {filters.map((name) => {
+            const active = name === filter;
+            return (
+              <button
+                key={name}
+                type="button"
+                aria-pressed={active}
+                onClick={() => pick(name)}
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap motion-safe:transition-colors ${
+                  active ? 'bg-white text-[#09090b] shadow' : 'text-muted hover:text-text'
+                }`}
+              >
+                {name}
+                <span className={`rounded-full px-1.5 text-xs ${active ? 'bg-black/10' : 'bg-white/10'}`}>{countFor(name)}</span>
+              </button>
+            );
+          })}
+        </div>
+        <p className="sr-only" aria-live="polite">
+          Showing {shown.length} {filter === 'All' ? '' : filter} {shown.length === 1 ? 'project' : 'projects'}
+        </p>
+      </div>
+
       <ul
         id="work-track"
         ref={track}
         aria-label="Projects"
-        className="no-scrollbar reveal mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pt-2 pb-4"
+        className="no-scrollbar reveal mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto pt-2 pb-4"
         style={{
           paddingInline: 'max(1rem, calc((100vw - 1180px) / 2 + 2rem))',
           scrollPaddingInline: 'max(1rem, calc((100vw - 1180px) / 2 + 2rem))',
         }}
       >
-        {projects.map((project) => {
+        {shown.map((project) => {
           const extra = project.stack.length - shownTags;
           return (
             <li key={project.title} className="w-[82vw] max-w-[20.5rem] shrink-0 snap-start">
