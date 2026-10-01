@@ -31,7 +31,7 @@ export const site = {
   businessName: 'Kim Soriano Software Development',
   role: 'Senior Full-Stack Engineer',
   yearsExperience: 8,
-  /** First year in professional development (internship, Oct 2017). */
+  /** Year shown in the About heading: graduation and first full-time role (Kyrrex, Oct 2018). */
   since: 2018,
 
   description:
