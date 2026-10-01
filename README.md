@@ -1,8 +1,9 @@
-# Kim Russel Antonio Soriano, freelance full-stack developer
+# Kim Russel Antonio Soriano, senior full-stack engineer
 
-The website for my freelance development business. It's a single page with
-About, What I Do, Skills, Projects, Experience and Get In Touch sections, plus a
-`/legal` imprint page.
+My portfolio and business site. It's a single page with Hero, About, Experience,
+How I Work, Services, Projects, Skills, Education & Achievements and Contact
+sections, plus a `/legal` imprint page. The career content follows my CV
+(`Kim-full-stack2.pdf`).
 
 Built with Vite, React, TypeScript, Tailwind CSS 4 and react-router-dom. It
 has no backend, no database and no forms. `npm run build` produces a static
@@ -67,10 +68,10 @@ email, phone number, address or link.
 | Email                            | `site.email`                      | Hero, Contact, footer, `/legal`, JSON-LD, `<noscript>`              |
 | Phone                            | `site.phone`                      | Same places as the email. The `tel:` link is derived from it       |
 | Address                          | `site.address`                    | Contact, `/legal`, JSON-LD (as PostalAddress fields), `<noscript>`. The city and country also appear in the hero, About and footer |
-| Photo                            | `site.photo`                      | Round avatar in the hero, framed portrait in About, and `og:image` / JSON-LD `image` once `url` is set |
+| Photo                            | `site.photo`                      | Portrait in About, and `og:image` / JSON-LD `image` once `url` is set |
 | GitHub                           | `site.links`                      | Hero, Contact, JSON-LD `sameAs`                                    |
 | Site URL                         | `site.url`                        | JSON-LD `url`, Open Graph                                          |
-| Services, skills, projects, facts, background, how I work | `services`, `skills`, `techCloud`, `projects`, `facts`, `background`, `howIWork` | Their sections |
+| Profile, stats, roles, process, services, projects, skills, education | `profile`, `stats`, `strengths`, `jobs`, `process`, `services`, `projects`, `skillTabs`, `highlights` | Their sections |
 
 ### How the details reach the static HTML
 
@@ -96,71 +97,59 @@ vite.config.ts
 vercel.json              SPA rewrite so /legal works on a direct visit
 public/
   icon.svg, robots.txt
-  work/*.webp            screenshots of the three live client sites
-  (your portrait)        e.g. portrait.jpg
+  portrait-cut*.webp     portrait with the background removed (About)
+  portrait.jpg           original portrait, for Open Graph and JSON-LD
+  work/*.webp            project screenshots
 scripts/
   verify-content.mjs     checks dist/index.html after a build
 src/
-  config/site.ts         every personal and business detail, plus skills,
-                         facts, projects, background and "How I work"
-  index.css              palette tokens, starfield, glow cards, buttons, motion
+  config/site.ts         every personal and business detail, plus all section content
+  index.css              colour tokens, cards, buttons, ribbons, motion
   App.tsx                routes, header, footer, skip link
   pages/                 Home, Legal, NotFound
-  components/            Header, Hero, About, Services, Skills, Work,
-                         Experience, Contact, Footer, Section, Emblem
-                         (glowing section illustrations), Portrait, Icon
+  components/            Header, Logo, Hero, Ribbons, About, Experience, Process,
+                         Services, CtaBanner, Work, Skills, Highlights, Contact,
+                         Footer, Section (heading), Icon
   hooks/                 useReveal (scroll fade-in), useActiveSection
-                         (nav highlight), useDocumentTitle
+                         (nav highlight), useReducedMotion, useDocumentTitle
 ```
 
 ## Portrait
 
-The source is a 1254 × 1254 head-and-shoulders photo on a white background.
-It was resized and cropped with ImageMagick. Nothing else was changed.
+The source is `111.png`, a 1254 × 1254 head-and-shoulders photo on a white
+background. For the About section the white background was removed with
+ImageMagick (flood fill from the top corners, edge softened), so the photo sits
+on a violet panel. The face and shirt were not altered.
 
-| File                          | Size        | Used for                                     |
-| ----------------------------- | ----------- | -------------------------------------------- |
-| `public/portrait.webp`        | 1200 × 1200 | About frame on high-density screens          |
-| `public/portrait-600.webp`    | 600 × 600   | About frame on 1× and 2× screens             |
-| `public/portrait-avatar.webp` | 480 × 480   | Round hero avatar (tighter face crop)        |
-| `public/portrait.jpg`         | 1200 × 1200 | Open Graph `og:image` and JSON-LD `image`    |
-
-To swap the photo, replace these four files and keep the names, or update
-`photo` in `src/config/site.ts`.
+| File                          | Size        | Used for                                  |
+| ----------------------------- | ----------- | ----------------------------------------- |
+| `public/portrait-cut.webp`    | 1000 × 1000 | About portrait, transparent background    |
+| `public/portrait-cut-520.webp`| 520 × 520   | Same, for smaller screens                 |
+| `public/portrait.jpg`         | 1200 × 1200 | Open Graph `og:image` and JSON-LD `image` |
 
 ## Design notes
 
-- **Look.** Dark neon: a static CSS starfield, gradient section titles (pink,
-  violet, cyan), glowing cards, a pill navigation that highlights the section
-  you're in, and a small glowing illustration under each main title. The
-  site is dark only.
-- **Palette.** The tokens are CSS custom properties on `:root` in
-  `src/index.css`. The light neon colours (`--pink`, `--violet`, `--cyan`,
-  `--blue`, `--green`, `--orange`) are used for text and icons. The `-deep`
-  versions are used as button and icon-tile fills, with white on top.
-- **Contrast.** Every text and background pair passes WCAG AA:
-
-  | Pair                                                    | Ratio            |
-  | ------------------------------------------------------- | ---------------- |
-  | Body text `#EEF0FF` on the background and cards         | 15.1 to 17.7     |
-  | Muted text `#ABAACD` on the background and cards        | 7.6 to 8.9       |
-  | Neon text (pink, violet, blue) on cards                 | 6.5 to 7.9       |
-  | Neon text (cyan, green, orange) on cards                | 10.2 to 13.8     |
-  | White on button and tile fills (violet, blue, pink, cyan, green, orange deep) | 5.2 to 7.1 |
-
-- **Motion.** Everything is 300 ms or less, and all of it sits inside
-  `@media (prefers-reduced-motion: no-preference)`. The illustrations are
-  static.
-- **Projects.** All 14 projects from the original portfolio at
-  kimrussel.vercel.app, with their original titles, tags and screenshots. The
-  screenshots were converted to 800 × 500 WebP in `public/work/`. Each
-  description only restates that project's tags. Add a sentence about the
-  problem you solved whenever you like, in `projects` in `site.ts`.
-- **Fonts.** Poppins loads from Google Fonts without blocking the first paint.
+- **Look.** Near-black background with a single violet accent, modelled on a
+  dark agency-style portfolio: pill labels over two-tone section titles,
+  white pill primary buttons, a typing role line in the hero, two crossing
+  scrolling word ribbons, a stepper for "How I Work", a staggered services
+  grid, a project carousel, tabbed skill cards and a call to action over a
+  tilted wall of project screenshots. The site is dark only.
+- **Palette.** Tokens are CSS custom properties on `:root` in `src/index.css`.
+  Body text `#F4F4F5` and muted `#A1A1AA` on `#09090B`/card backgrounds; light
+  violet `#C084FC` for accent text; deep violet `#7C3AED` only as a fill with
+  white text.
+- **Interactive parts.** Experience and Skills are ARIA tabs with arrow-key
+  support. The process stepper auto-advances until a step is clicked and
+  pauses on hover. The carousel scrolls natively with snap points.
+- **Motion.** Typing, ribbons, step auto-advance and scroll reveals are all
+  switched off under `prefers-reduced-motion`; the first role shows statically.
+- **No invented content.** The reference design has pricing, client reviews
+  and blog sections; those were left out because there is no real data for
+  them. Their slots hold Skills and Education & Achievements from the CV.
+- **Fonts.** Inter loads from Google Fonts without blocking the first paint.
 
 ## Measured
 
-Lighthouse 12, run against the production build served with gzip (as Vercel
-does), scored 100 for performance, accessibility, best practices and SEO on
-both `/` and `/legal`. There were no console errors or warnings, no horizontal
-scroll at 375 px, and exactly one `h1` per page.
+Checked in headless Chrome at 1440 px and 375 px, with and without reduced
+motion. Re-run Lighthouse after deploying.

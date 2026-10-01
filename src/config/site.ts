@@ -6,6 +6,9 @@
  * identity-html.ts), so the JSON-LD, meta tags and <noscript> block always
  * match what the React app shows.
  *
+ * The career content (profile, roles, skills, achievements) follows the CV,
+ * Kim-full-stack2.pdf.
+ *
  * Anything still reading [[FILL: ...]] needs a real value before launch.
  * `npm run fills` lists every one that's left.
  */
@@ -26,11 +29,13 @@ export const site = {
 
   /** Trading name, used for schema.org ProfessionalService and the imprint. */
   businessName: 'Kim Soriano Software Development',
-  role: 'Freelance full-stack developer',
+  role: 'Senior Full-Stack Engineer',
   yearsExperience: 8,
+  /** First year in professional development (internship, Oct 2017). */
+  since: 2018,
 
   description:
-    'Kim Russel Antonio Soriano is a freelance full-stack developer in Angeles City, Philippines, building web applications, Shopify stores, Laravel apps and API integrations for clients worldwide.',
+    'Kim Russel Antonio Soriano is a senior full-stack engineer in Angeles City, Philippines, with 8 years of experience building production web applications, APIs, microservices and LLM features across fintech, telecom, e-commerce and AI platforms.',
 
   email: 'sorianokimrussel02@gmail.com',
 
@@ -53,17 +58,15 @@ export const site = {
   timezone: 'UTC+8',
 
   photo: {
-    /** Square head-and-shoulders portrait, 1200 x 1200. */
-    src: '/portrait.webp',
-    /** Same crop at 600 x 600, for 1x and 2x screens. */
-    medium: '/portrait-600.webp',
-    /** Tighter face crop for the round hero avatar, 480 x 480. */
-    avatar: '/portrait-avatar.webp',
-    /** JPEG copy for Open Graph and JSON-LD, where WebP isn't always supported. */
+    /** Head-and-shoulders portrait cut out of its white background, 1000 x 1000, transparent WebP. */
+    src: '/portrait-cut.webp',
+    /** Same cutout at 520 x 520. */
+    medium: '/portrait-cut-520.webp',
+    /** Original photo on white, 1200 x 1200, for Open Graph and JSON-LD. */
     jpg: '/portrait.jpg',
     alt: 'Portrait of Kim Russel Antonio Soriano in a white shirt',
-    width: 1200,
-    height: 1200,
+    width: 1000,
+    height: 1000,
   },
 
   links: {
@@ -90,69 +93,305 @@ export const addressOneLine = addressLines.join(', ');
 
 export const nav = [
   { label: 'Home', id: 'top' },
-  { label: 'About', id: 'about' },
-  { label: 'Services', id: 'services' },
-  { label: 'Skills', id: 'skills' },
-  { label: 'Work', id: 'work' },
+  { label: 'About Me', id: 'about' },
   { label: 'Experience', id: 'experience' },
+  { label: 'Services', id: 'services' },
+  { label: 'Portfolio', id: 'work' },
+  { label: 'Skills', id: 'skills' },
   { label: 'Contact', id: 'contact' },
 ] as const;
+
+/** Words on the two crossing ribbons under the hero. */
+export const ribbons = {
+  light: ['Full-Stack', 'Scalable', 'Reliable', 'Performant'],
+  accent: ['APIs', 'Microservices', 'AI & LLM', 'Cloud'],
+};
+
+/** Profile paragraphs, from the CV. */
+export const profile = [
+  "I'm Kim Russel Antonio Soriano, a senior full-stack engineer with 8 years of experience designing and shipping production web applications across fintech, telecom, e-commerce and AI-powered platforms.",
+  'I work end to end: React, Next.js, Vue and Angular on the frontend, Node.js, Python, PHP and .NET on the backend, with PostgreSQL, Redis and containerized deployments underneath. I have shipped production LLM features with LangChain and Pinecone, and I care about frontend performance, technical SEO and accessibility.',
+];
+
+/** The stat card beside the portrait. Plain facts from the CV. */
+export const stats = [
+  { value: '8+', label: 'Years of experience' },
+  { value: '5', label: 'Companies & teams' },
+  { value: '2020', label: 'Mentoring since' },
+];
+
+/** The four cards under the About text. */
+export const strengths: { eyebrow: string; title: string; body: string; icon: IconKey }[] = [
+  { eyebrow: 'Backend', title: 'APIs & Microservices', body: 'REST and GraphQL APIs, and monoliths split into services that deploy on their own.', icon: 'server' },
+  { eyebrow: 'Frontend', title: 'Fast Interfaces', body: 'Lazy-loaded, well-rendered dashboards with attention to Core Web Vitals.', icon: 'bolt' },
+  { eyebrow: 'AI', title: 'LLM Features', body: 'Semantic search and retrieval pipelines with LangChain and Pinecone.', icon: 'sparkle' },
+  { eyebrow: 'Quality', title: 'Tested & Accessible', body: 'Unit, integration and end-to-end tests, plus WCAG-minded markup.', icon: 'shield' },
+];
+
+/** Icon names shared by config entries. Must match keys in components/Icon.tsx. */
+export type IconKey =
+  | 'server'
+  | 'bolt'
+  | 'sparkle'
+  | 'shield'
+  | 'window'
+  | 'layers'
+  | 'plug'
+  | 'database'
+  | 'cloud'
+  | 'search'
+  | 'cart'
+  | 'chart'
+  | 'card'
+  | 'check'
+  | 'mobile'
+  | 'flask'
+  | 'compass'
+  | 'pen'
+  | 'code'
+  | 'rocket';
+
+export type Job = {
+  role: string;
+  company: string;
+  site?: string;
+  period: string;
+  /** Short label for the queue list. */
+  short: string;
+  summary: string;
+  stack: string[];
+  groups: { title: string; points: string[] }[];
+};
+
+/** Employment and internship, newest first, as written in the CV. */
+export const jobs: Job[] = [
+  {
+    role: 'Senior Full Stack Engineer',
+    company: 'Kingsramsum',
+    site: 'kingsramsum.com',
+    period: 'Aug 2024 – May 2026',
+    short: 'Supply chain platform, microservices and AI search',
+    summary:
+      'Supply chain platform handling high-volume supplier and blockchain data. Worked across backend architecture, API design, data processing, frontend performance and AI integration.',
+    stack: ['Python', 'FastAPI', 'LangChain', 'Pinecone', 'React', 'React Native'],
+    groups: [
+      {
+        title: 'Backend & Microservices',
+        points: [
+          'Decomposed a complex monolith into Python microservices, separating supplier ingestion, normalization, forecasting and dashboard services for maintainability and scalability.',
+          'Designed and implemented APIs with FastAPI, applying versioning and validation so services could be deployed independently and safely.',
+        ],
+      },
+      {
+        title: 'AI & LLM Integration',
+        points: [
+          'Built a Python semantic search backend using LangChain and Pinecone to store document embeddings, delivering context-aware answers across hundreds of internal documents.',
+          'Tuned the retrieval pipeline to balance cost, speed and accuracy, and monitored token usage through a React dashboard.',
+        ],
+      },
+      {
+        title: 'Frontend & Mobile',
+        points: [
+          'Rebuilt the core React enterprise dashboard with optimized rendering and lazy-loaded components, improving initial load performance for supply chain managers.',
+          'Built cross-platform mobile applications using React Native, covering responsive UI flows, state management and offline features.',
+        ],
+      },
+    ],
+  },
+  {
+    role: 'Full Stack Engineer',
+    company: 'KM3 Solutions LLC',
+    site: 'km3solutions.com',
+    period: 'Feb 2023 – Jul 2024',
+    short: 'E-commerce and analytics, Angular and Node.js',
+    summary:
+      'Two-sided e-commerce and analytics platform serving global clients, spanning catalog and ordering systems, data pipelines and developer tooling.',
+    stack: ['Angular', 'Node.js', 'PostgreSQL', 'REST APIs'],
+    groups: [
+      {
+        title: 'Full-Stack Development',
+        points: [
+          'Developed full-stack catalog browsing, filtering and ordering systems using Angular and Node.js across web and mobile.',
+          'Implemented atomic transactional flows across checkout, inventory and order management systems, keeping stock and orders consistent under load.',
+        ],
+      },
+      {
+        title: 'Database & Performance',
+        points: ['Optimized PostgreSQL queries and caching strategies, reducing catalog search response times during high-traffic periods.'],
+      },
+      {
+        title: 'Backend & Data Processing',
+        points: [
+          'Built backend services and RESTful APIs in Node.js for high-volume analytics pipelines, covering scalable data ingestion, aggregation and real-time reporting for global clients.',
+        ],
+      },
+    ],
+  },
+  {
+    role: 'Full Stack Developer',
+    company: 'Comcast',
+    period: 'Mar 2020 – Jan 2023',
+    short: 'Telecom operations and reporting platforms',
+    summary:
+      'Internal operations and reporting platforms for a telecom provider, centred on moving legacy systems onto modern web infrastructure.',
+    stack: ['PHP', 'MySQL', 'Vue.js', 'Docker', 'Kubernetes', 'AWS', 'GCP'],
+    groups: [
+      {
+        title: 'Backend & Data',
+        points: [
+          'Helped migrate legacy mainframe systems to MySQL and PHP platforms for near real-time reporting.',
+          'Built API endpoints, data pipelines and SQL reporting workflows for subscriber and operational data.',
+        ],
+      },
+      {
+        title: 'Frontend',
+        points: [
+          'Built responsive Vue.js dashboards and internal tools, improving accessibility and cross-browser support, with SEO compliance and fast load times.',
+        ],
+      },
+      {
+        title: 'Cloud & Infrastructure',
+        points: [
+          'Containerized microservices with Docker and Kubernetes, and managed deployments on AWS and GCP.',
+          'Wrote unit, integration and end-to-end tests with Jest, PHPUnit and Cypress to maintain reliability and prevent regressions.',
+        ],
+      },
+    ],
+  },
+  {
+    role: 'Full-Stack Developer',
+    company: 'Kyrrex',
+    site: 'kyrrex.com',
+    period: 'Oct 2018 – Feb 2020',
+    short: 'Payments, blockchain, trading and CRM',
+    summary:
+      'E-commerce, payment, blockchain, trading and CRM solutions using Django, Python, Node.js, Ethereum, Tron and crypto APIs.',
+    stack: ['Django', 'Python', 'Node.js', 'Stripe', 'Ethereum', 'Tron'],
+    groups: [
+      {
+        title: 'Full-Stack Development',
+        points: [
+          'Built the MVP with Django, then developed new features and maintained the complete application for over a year.',
+          'Integrated Stripe for payment processing and customized vtiger CRM.',
+        ],
+      },
+      {
+        title: 'Blockchain & Trading',
+        points: [
+          'Developed blockchain solutions including smart contracts on Ethereum and Tron, peer-to-peer Bitcoin payments, and cryptographic security using CryptoJS.',
+          'Built backend panels, integrated crypto payment APIs, and developed trading platforms (MetaTrader 4 & 5, IQ Option, Expert Option) and CRMs using Node.js, Express and Meteor.',
+        ],
+      },
+      {
+        title: 'Business & Partnerships',
+        points: ['Worked as a partner in the business, sourcing new vendors and customers, onboarding them and providing ongoing support.'],
+      },
+    ],
+  },
+  {
+    role: 'Full-Stack Developer Intern',
+    company: 'Vanguard Web Solutions',
+    period: 'Oct 2017 – Sep 2018',
+    short: 'Internship: React, Node.js and payments',
+    summary: 'Internship covering frontend, backend, payments and cloud services.',
+    stack: ['React', 'Node.js', 'PayPal', 'Stripe', 'GCP'],
+    groups: [
+      {
+        title: 'Full Stack Development',
+        points: [
+          'Built responsive interfaces and single-page components in React.',
+          'Developed backend services and REST APIs in Node.js for data processing.',
+          'Customized vtiger CRM and optimized its workflow.',
+          'Integrated payment gateways (PayPal, Stripe, Apple Pay, Google Pay) and managed GCP-based cloud services.',
+          'Looked after systems across macOS, Windows and Ubuntu, keeping operations secure and scalable.',
+        ],
+      },
+    ],
+  },
+];
+
+/** "How I work" steps. */
+export const process: { title: string; tag: string; body: string; points: string[]; outcome: string; icon: IconKey }[] = [
+  {
+    title: 'Discovery',
+    tag: 'Requirements',
+    body: 'We pin down the problem, the users and the constraints, and agree the scope in writing before any code is written.',
+    points: ['Goals and success criteria', 'Existing systems and data', 'Timeline and milestones'],
+    outcome: 'A written scope we both sign off',
+    icon: 'compass',
+  },
+  {
+    title: 'Architecture',
+    tag: 'System Design',
+    body: 'I design the data model, the API contracts and how the services fit together, so the build has a clear shape.',
+    points: ['Schema and migrations plan', 'REST or GraphQL contracts', 'Monolith or services, and why'],
+    outcome: 'An architecture you can review',
+    icon: 'layers',
+  },
+  {
+    title: 'Interface',
+    tag: 'UI Direction',
+    body: 'Responsive, accessible screens that match your brand, built as reusable components rather than one-off pages.',
+    points: ['Component structure', 'Responsive layouts', 'WCAG-minded markup'],
+    outcome: 'Screens you can click through',
+    icon: 'pen',
+  },
+  {
+    title: 'Development',
+    tag: 'Clean Code Build',
+    body: 'Frontend, backend and integrations built in small releases you can try as they land, with code review on every change.',
+    points: ['Frontend development', 'Backend and API build', 'Payments and third-party integrations'],
+    outcome: 'A working build, release by release',
+    icon: 'code',
+  },
+  {
+    title: 'Testing',
+    tag: 'Quality Assurance',
+    body: 'Unit, integration and end-to-end tests around the parts that matter, plus performance checks before launch.',
+    points: ['Jest, PHPUnit, Cypress', 'Load and query performance', 'Cross-browser checks'],
+    outcome: 'Confidence the release holds up',
+    icon: 'flask',
+  },
+  {
+    title: 'Launch & Support',
+    tag: 'Deploy',
+    body: 'Containerized deploys with CI/CD, monitoring in place, and a clean handover the next developer can follow.',
+    points: ['Docker and CI/CD pipeline', 'AWS, GCP or Azure', 'Docs and handover notes'],
+    outcome: 'A live product, documented',
+    icon: 'rocket',
+  },
+];
 
 export type Service = {
   /** Full name, used in the JSON-LD offer catalog. */
   title: string;
-  /** Two-line card heading. The first word gets the underline. */
-  heading: [string, string];
-  tagline: string;
   body: string;
-  icon: 'window' | 'bag' | 'layers' | 'plug';
+  icon: IconKey;
   /** Icon tile colour. */
-  color: Tone;
+  tone: Tone;
 };
 
-/** Neon colour families used for icon tiles and card glows. */
-export type Tone = 'blue' | 'violet' | 'pink' | 'orange' | 'cyan' | 'green';
+/** Accent colour families for icon tiles. */
+export type Tone = 'violet' | 'teal' | 'blue' | 'rose' | 'amber' | 'green';
 
 export const services: Service[] = [
-  {
-    title: 'Full-stack web application development',
-    heading: ['Full-stack', 'Web Apps'],
-    tagline: 'React, Next.js, Vue, Node',
-    body: "Dashboards, customer portals, booking systems and internal tools, built end to end: interface, backend, database and deploy. I ship in small releases you can click through as they land.",
-    icon: 'window',
-    color: 'blue',
-  },
-  {
-    title: 'Shopify development and conversion rate optimisation',
-    heading: ['Shopify', 'Development & CRO'],
-    tagline: 'Themes, Liquid, Shopify Plus',
-    body: "Custom themes, sections, templates and store migrations. I also clean up the path from product page to checkout, always on a duplicate theme so your live shop isn't touched until you approve it.",
-    icon: 'bag',
-    color: 'violet',
-  },
-  {
-    title: 'Laravel and PHP application development',
-    heading: ['Laravel', '& PHP Apps'],
-    tagline: 'New builds and existing codebases',
-    body: "New Laravel applications, and steady work on existing PHP codebases that need someone to look after them. I add tests around what's there before changing it, so a fix in one place doesn't break another.",
-    icon: 'layers',
-    color: 'orange',
-  },
-  {
-    title: 'API development and third-party integrations',
-    heading: ['APIs', '& Integrations'],
-    tagline: 'REST, GraphQL, webhooks',
-    body: "APIs designed with you before any code gets written, then delivered tested and documented. I also connect the tools you already pay for, like payment providers, CRMs and shipping services.",
-    icon: 'plug',
-    color: 'pink',
-  },
+  { title: 'Full-Stack Web Apps', body: 'Production web applications in React, Next.js, Vue or Angular with a Node.js, Python, PHP or .NET backend.', icon: 'window', tone: 'violet' },
+  { title: 'API Design', body: 'Versioned, validated REST and GraphQL APIs that services and clients can rely on.', icon: 'plug', tone: 'teal' },
+  { title: 'Microservices', body: 'Breaking monoliths into independently deployable services, with event-driven patterns where they fit.', icon: 'layers', tone: 'blue' },
+  { title: 'AI & LLM Integration', body: 'Semantic search, retrieval pipelines and prompt design with LangChain and Pinecone, with token usage tracked.', icon: 'sparkle', tone: 'rose' },
+  { title: 'Data Pipelines & Reporting', body: 'High-volume ingestion, aggregation and real-time reporting for operational and analytics data.', icon: 'chart', tone: 'amber' },
+  { title: 'Database Engineering', body: 'PostgreSQL, MySQL, MongoDB and Redis: schema design, query optimization, caching and migrations.', icon: 'database', tone: 'green' },
+  { title: 'Frontend Performance', body: 'Faster first loads through lazy loading, better rendering and Core Web Vitals work.', icon: 'bolt', tone: 'violet' },
+  { title: 'Technical SEO & Accessibility', body: 'Crawlable, structured markup and WCAG-minded interfaces that work for every visitor.', icon: 'search', tone: 'teal' },
+  { title: 'E-commerce Systems', body: 'Catalog, checkout, inventory and order flows that stay consistent under load.', icon: 'cart', tone: 'blue' },
+  { title: 'Payments & Integrations', body: 'Stripe, PayPal, Apple Pay, Google Pay, Klaviyo, Algolia, OAuth, webhooks and ERP sync.', icon: 'card', tone: 'rose' },
+  { title: 'Cloud & DevOps', body: 'Docker, Kubernetes and CI/CD on AWS, GCP and Azure, from first deploy to steady operation.', icon: 'cloud', tone: 'amber' },
+  { title: 'Mobile Apps', body: 'Cross-platform React Native apps with responsive flows, state management and offline support.', icon: 'mobile', tone: 'green' },
 ];
 
 export type Project = {
   title: string;
-  /** Used for the Work filter. */
   category: 'Shopify' | 'WordPress' | 'Data visualisation' | 'Web apps';
-  kind: string;
   body: string;
   stack: string[];
   href?: string;
@@ -161,73 +400,51 @@ export type Project = {
 };
 
 /**
- * Every project from my original portfolio (kimrussel.vercel.app), with its
- * original title, tags and screenshot. Descriptions only restate those tags.
+ * Projects from my original portfolio (kimrussel.vercel.app), with their
+ * original titles, tags and screenshots. Descriptions only restate those tags.
  */
 export const projects: Project[] = [
   {
     title: 'Not Too Sweet',
     category: 'Shopify',
-    kind: 'Shopify store, botanical drinks',
     body: 'Shopify store for a low-sugar botanical drinks brand: theme templates, web design and API integrations.',
     stack: ['Shopify', 'Shopify templates', 'Web design', 'API integration'],
     href: 'https://nottoosweetlife.com',
     image: { src: '/work/not-too-sweet.webp', alt: 'Home page of the Not Too Sweet store, showing a bottle of lavender and honey lemonade', width: 800, height: 500 },
   },
   {
-    title: 'Mowellens store',
+    title: 'Trade Map',
+    category: 'Data visualisation',
+    body: 'An interactive trade map in React, with Deck.gl and Mapbox for the map layers and D3.js for the charts.',
+    stack: ['React', 'Deck.gl', 'Mapbox', 'D3.js'],
+    image: { src: '/work/trade-map.webp', alt: 'Dark world map with trade routes drawn as arcs and a timeline chart below', width: 800, height: 500 },
+  },
+  {
+    title: 'Mowellens',
     category: 'Shopify',
-    kind: 'Shopify store, wellness and skincare',
     body: 'Shopify development for a wellness and skincare brand: theme customisation, product and collection templates, and API integrations.',
     stack: ['Shopify', 'Shopify templates', 'Web design', 'API integration'],
     href: 'https://mowellens.com',
     image: { src: '/work/mowellens.webp', alt: 'Mowellens store home page with amber bottles of body oil', width: 800, height: 500 },
   },
   {
-    title: 'Blackhalo store',
+    title: 'Route Tool',
+    category: 'Data visualisation',
+    body: 'A route exploration tool in React on a Mapbox map, with Deck.gl layers and D3.js visualisations.',
+    stack: ['React', 'Deck.gl', 'Mapbox', 'D3.js'],
+    image: { src: '/work/route-tool.webp', alt: 'Map of Africa and Asia with a highlighted route between two airports', width: 800, height: 500 },
+  },
+  {
+    title: 'Black Halo',
     category: 'Shopify',
-    kind: 'Shopify store, fashion',
     body: 'Storefront work on a Shopify fashion store: theme sections and templates, web design and API integrations.',
     stack: ['Shopify', 'Shopify templates', 'Web design', 'API integration'],
     href: 'https://blackhalo.com',
     image: { src: '/work/blackhalo.webp', alt: 'Black Halo shop page listing dresses and jumpsuits', width: 800, height: 500 },
   },
   {
-    title: 'Docubee website',
-    category: 'WordPress',
-    kind: 'WordPress site',
-    body: 'A Figma design built out in WordPress with Elementor, HTML and CSS.',
-    stack: ['Elementor', 'Figma to WordPress', 'HTML', 'CSS'],
-    image: { src: '/work/docubee.webp', alt: 'Docubee home page promoting contract automation software', width: 800, height: 500 },
-  },
-  {
-    title: 'WordPress website',
-    category: 'WordPress',
-    kind: 'WordPress site',
-    body: 'A WordPress site with custom content fields in ACF and a Bootstrap front end.',
-    stack: ['WordPress', 'ACF', 'Bootstrap'],
-    image: { src: '/work/wordpress-site.webp', alt: 'Home page of a communications agency website built in WordPress', width: 800, height: 500 },
-  },
-  {
-    title: 'Trade Map',
-    category: 'Data visualisation',
-    kind: 'Interactive map',
-    body: 'An interactive trade map in React, with Deck.gl and Mapbox for the map layers and D3.js for the charts.',
-    stack: ['React', 'Deck.gl', 'Mapbox', 'D3.js'],
-    image: { src: '/work/trade-map.webp', alt: 'Dark world map with trade routes drawn as arcs and a timeline chart below', width: 800, height: 500 },
-  },
-  {
-    title: 'Route Tool',
-    category: 'Data visualisation',
-    kind: 'Interactive map',
-    body: 'A route exploration tool in React on a Mapbox map, with Deck.gl layers and D3.js visualisations.',
-    stack: ['React', 'Deck.gl', 'Mapbox', 'D3.js'],
-    image: { src: '/work/route-tool.webp', alt: 'Map of Africa and Asia with a highlighted route between two airports', width: 800, height: 500 },
-  },
-  {
     title: 'Country Profile',
     category: 'Data visualisation',
-    kind: 'Data dashboard',
     body: 'Country-by-country data profiles in React, with charts built in amCharts and D3.js.',
     stack: ['React', 'amCharts', 'D3.js'],
     image: { src: '/work/country-profile.webp', alt: 'Globe with African countries shaded by value and a tooltip on one country', width: 800, height: 500 },
@@ -235,99 +452,110 @@ export const projects: Project[] = [
   {
     title: 'Routes Dashboard',
     category: 'Data visualisation',
-    kind: 'Data dashboard',
     body: 'A routes data dashboard in Vue.js, with charts in D3.js and amCharts and the data prepared in R.',
     stack: ['Vue.js', 'D3.js', 'amCharts', 'R'],
     image: { src: '/work/routes-dashboard.webp', alt: 'Routes dashboard page with a globe plotting incidents around the world', width: 800, height: 500 },
   },
   {
-    title: 'Doctornyla website',
-    category: 'WordPress',
-    kind: 'WordPress site',
-    body: 'A WordPress site for a medical aesthetics clinic, with custom content fields in ACF and a Bootstrap front end.',
-    stack: ['WordPress', 'ACF', 'Bootstrap'],
-    image: { src: '/work/doctornyla.webp', alt: 'Doctor Nyla medispa home page with a treatment photo', width: 800, height: 500 },
-  },
-  {
-    title: 'Next.js website',
+    title: 'Next.js Platform Site',
     category: 'Web apps',
-    kind: 'Web application',
     body: 'A website built in Next.js and React, with the interface in Material UI.',
     stack: ['Next.js', 'React', 'Material UI'],
     image: { src: '/work/nextjs-site.webp', alt: 'Dark landing page for an augmented reality platform built in Next.js', width: 800, height: 500 },
   },
   {
-    title: 'Skincare website',
-    category: 'WordPress',
-    kind: 'WordPress site',
-    body: 'A WordPress site for a skincare clinic, with custom content fields in ACF and a Bootstrap front end.',
-    stack: ['WordPress', 'ACF', 'Bootstrap'],
-    image: { src: '/work/skincare.webp', alt: 'Skincare page of a clinic website with product photography', width: 800, height: 500 },
-  },
-  {
-    title: 'Shopping website using Laravel and Vue.js',
+    title: 'Laravel + Vue.js Shop',
     category: 'Web apps',
-    kind: 'E-commerce web app',
     body: 'An online shop with a Laravel backend and a Vue.js front end.',
     stack: ['Laravel', 'Vue.js', 'Bootstrap'],
     image: { src: '/work/laravel-vue-shop.webp', alt: 'Online shop home page with a large product promotion banner', width: 800, height: 500 },
   },
   {
-    title: 'Shopping website using Laravel and Angular',
+    title: 'Laravel + Angular Shop',
     category: 'Web apps',
-    kind: 'E-commerce web app',
     body: 'An online shop with a Laravel backend and an Angular front end.',
     stack: ['Laravel', 'Angular', 'Bootstrap'],
     image: { src: '/work/laravel-angular-shop.webp', alt: 'Online restaurant supply shop home page with a promotional banner', width: 800, height: 500 },
   },
-];
-
-export const about = {
-  industries: ['fintech', 'telecom', 'e-commerce', 'blockchain', 'AI platforms'],
-  mentoringSince: 2020,
-};
-
-/** The purple timeline bars in About. Only facts, no invented roles. */
-export const background = [
   {
-    title: 'Freelance full-stack developer',
-    period: '8 years',
-    body: "Web apps, Shopify stores, Laravel apps and APIs across fintech, telecom, e-commerce, blockchain and AI platforms. Sometimes as the only developer, sometimes as one of many.",
+    title: 'Docubee',
+    category: 'WordPress',
+    body: 'A Figma design built out in WordPress with Elementor, HTML and CSS.',
+    stack: ['Elementor', 'Figma to WordPress', 'HTML', 'CSS'],
+    image: { src: '/work/docubee.webp', alt: 'Docubee home page promoting contract automation software', width: 800, height: 500 },
   },
   {
-    title: 'Mentoring developers',
-    period: '2020 to present',
-    body: 'Reviewing code, pairing on problems, and helping developers grow into more senior roles.',
+    title: 'Doctor Nyla',
+    category: 'WordPress',
+    body: 'A WordPress site for a medical aesthetics clinic, with custom content fields in ACF and a Bootstrap front end.',
+    stack: ['WordPress', 'ACF', 'Bootstrap'],
+    image: { src: '/work/doctornyla.webp', alt: 'Doctor Nyla medispa home page with a treatment photo', width: 800, height: 500 },
   },
   {
-    title: 'BS Computer Science, UP Diliman Extension Program in Pampanga',
-    period: '2013 to 2017',
-    body: 'Where the habit started.',
+    title: 'Skincare Clinic',
+    category: 'WordPress',
+    body: 'A WordPress site for a skincare clinic, with custom content fields in ACF and a Bootstrap front end.',
+    stack: ['WordPress', 'ACF', 'Bootstrap'],
+    image: { src: '/work/skincare.webp', alt: 'Skincare page of a clinic website with product photography', width: 800, height: 500 },
+  },
+  {
+    title: 'Agency Website',
+    category: 'WordPress',
+    body: 'A WordPress site with custom content fields in ACF and a Bootstrap front end.',
+    stack: ['WordPress', 'ACF', 'Bootstrap'],
+    image: { src: '/work/wordpress-site.webp', alt: 'Home page of a communications agency website built in WordPress', width: 800, height: 500 },
   },
 ];
 
-/** Tech from my own profile, grouped for the Skills cards. */
-export const skills: { title: string; color: Tone; items: string[] }[] = [
-  { title: 'Frontend', color: 'blue', items: ['React', 'Next.js', 'Vue', 'Angular', 'TypeScript', 'Tailwind CSS'] },
-  { title: 'Backend', color: 'green', items: ['Node.js', 'Laravel', 'PHP', 'Python', 'Golang', '.NET'] },
-  { title: 'Commerce & Cloud', color: 'orange', items: ['Shopify Plus', 'Liquid', 'AWS', 'GCP', 'Docker', 'Kubernetes'] },
+/** Skill groups from the CV, arranged into three tabs of three cards. */
+export const skillTabs: { label: string; groups: { title: string; items: string[] }[] }[] = [
+  {
+    label: 'Engineering',
+    groups: [
+      { title: 'Languages', items: ['TypeScript', 'JavaScript', 'Python', 'PHP', 'C#', 'SQL'] },
+      { title: 'Frontend', items: ['React & Next.js', 'Vue.js', 'Angular', 'SCSS & Tailwind CSS', 'Accessibility (WCAG)', 'Technical SEO & Core Web Vitals'] },
+      { title: 'Backend', items: ['Node.js & NestJS', 'ASP.NET Core & Entity Framework', 'Django & FastAPI', 'Laravel & Symfony', 'RESTful APIs', 'GraphQL'] },
+    ],
+  },
+  {
+    label: 'Data & AI',
+    groups: [
+      { title: 'Databases', items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Schema design', 'Query optimization & migrations'] },
+      { title: 'AI & LLM Integration', items: ['LangChain', 'Pinecone', 'Semantic search', 'Retrieval pipelines', 'Prompt design', 'Token usage monitoring'] },
+      { title: 'Integrations', items: ['Stripe, PayPal, Apple Pay, Google Pay', 'Klaviyo & Algolia', 'Webhooks & OAuth', 'ERP sync', 'CSV and SQL data migration'] },
+    ],
+  },
+  {
+    label: 'Delivery',
+    groups: [
+      { title: 'Cloud & DevOps', items: ['AWS (EC2, S3, RDS, CloudFront, Lambda)', 'GCP & Azure', 'Docker', 'Kubernetes', 'CI/CD', 'Git & GitHub'] },
+      { title: 'Testing & QA', items: ['Jest', 'PHPUnit', 'Cypress', 'Unit & integration testing', 'End-to-end testing', 'Performance optimization'] },
+      { title: 'Architecture & Methods', items: ['Monolithic & microservices', 'Event-driven architecture', 'Domain-driven design', 'Agile / Scrum', 'Code review'] },
+    ],
+  },
 ];
 
-/** Floating chips in the "Tech universe" strip. */
-export const techCloud = ['REST', 'GraphQL', 'D3.js', 'Deck.gl', 'Mapbox', 'amCharts', 'Material UI', 'Bootstrap', 'WordPress', 'Elementor', 'ACF', 'R', 'CI/CD', 'Terraform'];
-
-/** Stat cards. Every one of these is a plain fact, not a metric. */
-export const facts: { value: string; label: string; color: Tone }[] = [
-  { value: '8 yrs', label: 'Building for the web', color: 'blue' },
-  { value: 'BS CS', label: 'UP Diliman Extension, Pampanga, 2017', color: 'violet' },
-  { value: '2020', label: 'Mentoring developers since', color: 'pink' },
-  { value: '1 day', label: 'Reply time, business days', color: 'orange' },
-];
-
-/** "How I work" cards. */
-export const howIWork: { title: string; body: string; color: Tone }[] = [
-  { title: 'Scope in writing', body: "We agree what's being built and by when before any code gets written.", color: 'blue' },
-  { title: 'Small releases', body: 'You get something you can click through early, then every few days after that.', color: 'pink' },
-  { title: 'Early warnings', body: "If something looks off, you hear it from me that day, not at the deadline.", color: 'green' },
-  { title: 'A clean handover', body: 'The code, the deploy setup and notes the next developer can actually follow.', color: 'orange' },
+/** Education and achievements, from the CV. */
+export const highlights: { label: string; title: string; meta: string; body: string; icon: IconKey }[] = [
+  {
+    label: 'Education',
+    title: 'BS Computer Science',
+    meta: 'University of the Philippines in the Visayas · Aug 2014 – Jun 2018',
+    body: 'Bachelor of Science in Computer Science, Pampanga, Philippines.',
+    icon: 'compass',
+  },
+  {
+    label: 'Achievement',
+    title: 'Community Web Applications',
+    meta: 'Local government offices',
+    body: 'Built and deployed web applications for local government offices to streamline public services for residents.',
+    icon: 'window',
+  },
+  {
+    label: 'Achievement',
+    title: 'Developer Mentoring',
+    meta: 'Since 2020',
+    body: 'Free training for students in programming and freelancing, helping them build technical skills and become independent professionals.',
+    icon: 'sparkle',
+  },
 ];

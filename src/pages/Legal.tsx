@@ -18,7 +18,7 @@ export default function Legal() {
 
   return (
     <div className="container-page max-w-3xl py-16 md:py-24">
-      <p className="eyebrow mb-3">// imprint</p>
+      <p className="pill mb-4">Imprint</p>
       <h1 className="text-4xl sm:text-5xl">Legal notice</h1>
       <p className="mt-5 text-muted">The formal bit. Who runs this site and how to reach them.</p>
 
@@ -26,7 +26,7 @@ export default function Legal() {
         <h2 id="operator" className="text-2xl">
           Operator
         </h2>
-        <dl className="mt-5 border border-line bg-panel px-6 py-2 sm:px-8">
+        <dl className="mt-5 card px-6 py-2 sm:px-8">
           <Row label="Legal name">{site.name}</Row>
           <Row label="Trading as">{site.businessName}</Row>
           <Row label="Business address">

@@ -24,7 +24,7 @@ const hasRealUrl = !isPlaceholder(site.url);
 const base = hasRealUrl ? site.url : '';
 const photoUrl = hasRealUrl ? `${site.url}${site.photo.jpg}` : undefined;
 
-const title = `${site.name} | Freelance full-stack developer, Angeles City`;
+const title = `${site.name} | Senior full-stack engineer, Angeles City`;
 
 function jsonLd() {
   const address = {
@@ -105,9 +105,9 @@ function head() {
 
 function noscript() {
   return `<noscript>
-      <div style="max-width:40rem;margin:2rem auto;padding:0 1rem;font-family:system-ui,sans-serif;line-height:1.6;color:#eef0ff;background:#06061a">
+      <div style="max-width:40rem;margin:2rem auto;padding:0 1rem;font-family:system-ui,sans-serif;line-height:1.6;color:#f4f4f5;background:#09090b">
         <h1>${esc(site.name)}</h1>
-        <p>${esc(site.role)}. I build web applications, Shopify stores, Laravel and PHP applications, and API integrations.</p>
+        <p>${esc(site.role)}. I design and ship production web applications, APIs, microservices and AI features.</p>
         <p>
           Email: <a href="mailto:${esc(site.email)}">${esc(site.email)}</a><br />
           Phone: <a href="tel:${esc(phoneHref)}">${esc(site.phone)}</a><br />

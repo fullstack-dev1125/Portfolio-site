@@ -13,7 +13,7 @@ export default function App() {
       <ScrollManager />
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-cyan focus:px-5 focus:py-3 focus:font-bold focus:text-[#1b1b21]"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-white focus:px-5 focus:py-3 focus:font-bold focus:text-[#09090b]"
       >
         Skip to content
       </a>

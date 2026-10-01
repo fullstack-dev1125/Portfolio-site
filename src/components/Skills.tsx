@@ -1,65 +1,81 @@
-import { facts, skills, techCloud } from '../config/site';
-import Icon, { type IconName } from './Icon';
-import Section from './Section';
-import { tones } from './tones';
+import { useRef, useState, type KeyboardEvent } from 'react';
 
-const groupIcons: IconName[] = ['code', 'server', 'cloud'];
-const cloudTones = ['text-cyan', 'text-pink', 'text-violet', 'text-green', 'text-orange', 'text-blue'];
-const cloudTilt = ['-rotate-2', 'rotate-1', 'rotate-3', '-rotate-1', 'rotate-2', '-rotate-3'];
+import { skillTabs } from '../config/site';
+import Icon from './Icon';
+import Section, { SectionHeading } from './Section';
 
 export default function Skills() {
+  const [tab, setTab] = useState(0);
+  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const onKeyDown = (event: KeyboardEvent) => {
+    const moves: Record<string, number> = { ArrowRight: tab + 1, ArrowLeft: tab - 1, Home: 0, End: skillTabs.length - 1 };
+    if (!(event.key in moves)) return;
+    event.preventDefault();
+    const next = (moves[event.key] + skillTabs.length) % skillTabs.length;
+    setTab(next);
+    buttons.current[next]?.focus();
+  };
+
   return (
-    <Section id="skills" title="My Skills" emblem="wave">
-      <ul className="mt-14 grid gap-6 md:grid-cols-3">
-        {skills.map((group, index) => {
-          const tone = tones[group.color];
-          return (
-            <li key={group.title} className="reveal glow-card card-lift p-6">
-              <h3 className="flex items-center gap-3 text-lg">
-                <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl text-white ${tone.tile}`}>
-                  <Icon name={groupIcons[index] ?? 'code'} className="h-5 w-5" />
-                </span>
-                <span className={tone.text}>{group.title}</span>
-              </h3>
-              <ul className="mt-6 grid grid-cols-2 gap-3">
-                {group.items.map((item) => (
-                  <li key={item} className="flex flex-col items-center gap-2 rounded-xl border border-line bg-bg/60 px-2 py-3 text-center text-sm font-medium">
-                    <span aria-hidden="true" className={`flex h-8 w-8 items-center justify-center rounded-lg border ${tone.border} text-xs font-bold ${tone.text}`}>
-                      {item.replace(/[^A-Za-z]/g, '').slice(0, 2)}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
+    <Section id="skills">
+      <div className="container-page">
+        <SectionHeading id="skills" pill="Skills & Tools" title="My Tech" accent="Stack" intro="The languages, frameworks and platforms I use day to day, grouped the way they show up in a project." />
 
-      <div className="reveal mt-20 text-center">
-        <h3 className="text-2xl text-cyan sm:text-3xl">Tech Universe</h3>
-        <ul className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-4">
-          {techCloud.map((tech, index) => (
-            <li
-              key={tech}
-              className={`rounded-xl border border-line bg-card-2 px-4 py-2 text-sm font-semibold shadow-[0_0_20px_-6px_rgb(192_132_252/0.6)] ${cloudTones[index % cloudTones.length]} ${cloudTilt[index % cloudTilt.length]} ${index % 2 ? 'sm:translate-y-3' : ''}`}
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div className="reveal mt-10 flex justify-center">
+          <div role="tablist" aria-label="Skill areas" onKeyDown={onKeyDown} className="no-scrollbar flex max-w-full gap-1 overflow-x-auto rounded-full border border-line bg-card p-1">
+            {skillTabs.map((item, index) => {
+              const active = index === tab;
+              return (
+                <button
+                  key={item.label}
+                  ref={(el) => {
+                    buttons.current[index] = el;
+                  }}
+                  id={`skills-tab-${index}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  aria-controls="skills-panel"
+                  tabIndex={active ? 0 : -1}
+                  onClick={() => setTab(index)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap motion-safe:transition-colors sm:px-5 ${
+                    active ? 'bg-white text-[#09090b] shadow' : 'text-muted hover:text-text'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-      <div className="reveal mt-20 text-center">
-        <h3 className="text-2xl text-cyan sm:text-3xl">Quick Facts</h3>
-        <ul className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {facts.map((fact) => (
-            <li key={fact.label} className="glow-card card-lift flex flex-col items-center p-5">
-              <span className={`text-3xl font-extrabold ${tones[fact.color].text}`}>{fact.value}</span>
-              <span className="mt-2 text-sm text-muted">{fact.label}</span>
-            </li>
-          ))}
-        </ul>
+        <div id="skills-panel" role="tabpanel" aria-labelledby={`skills-tab-${tab}`} className="reveal mx-auto mt-10 max-w-5xl">
+          <ul key={tab} className="fade-in grid items-start gap-5 md:grid-cols-3">
+            {skillTabs[tab].groups.map((group, index) => {
+              const featured = index === 1;
+              return (
+                <li
+                  key={group.title}
+                  className={`card p-6 sm:p-7 ${featured ? 'border-white/25 bg-[linear-gradient(180deg,#232129,#141317)] shadow-[0_30px_70px_-35px_rgb(255_255_255/0.25)] md:-mt-3' : ''}`}
+                >
+                  <h3 className="text-xl">{group.title}</h3>
+                  <p className="mt-2 text-sm text-muted">
+                    <span className="text-3xl font-extrabold text-text">{group.items.length}</span> core skills
+                  </p>
+                  <ul className="mt-6 space-y-3">
+                    {group.items.map((item) => (
+                      <li key={item} className="flex gap-3 text-sm text-[#d4d4d8]">
+                        <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-violet" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </Section>
   );

@@ -11,7 +11,7 @@ export default function NotFound() {
       <h1 className="text-4xl sm:text-5xl">Nothing here, sorry.</h1>
       <p className="mx-auto mt-5 max-w-md text-muted">That page doesn't exist. It's not you, it's the URL.</p>
       <p className="mt-9">
-        <Link to="/" className="btn btn-primary">
+        <Link to="/" className="btn btn-light">
           Take me home
         </Link>
       </p>
