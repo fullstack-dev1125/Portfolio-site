@@ -37,7 +37,7 @@ export const site = {
   description:
     'Kim Russel Antonio Soriano is a senior full-stack engineer in Angeles City, Philippines, with 8 years of experience building production web applications, APIs, microservices and LLM features across fintech, telecom, e-commerce and AI platforms.',
 
-  email: 'sorianokimrussel02@gmail.com',
+  email: 'sorianokimrussel0@gmail.com',
 
   /**
    * Phone in international format with spaces, e.g. '+63 912 345 6789'.
